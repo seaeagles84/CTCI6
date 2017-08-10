@@ -10,6 +10,9 @@ unsigned int findNextBiggest(unsigned int n)
     unsigned int pad;
     unsigned int output;
     
+    if (n == 0)
+        return 0;
+    
     for (int i = 0; i < 32; i++) {
         cout << "i: " << i << endl;
         if ((n & 1<<i) != 0) { // watch out! without (), you will never get here passed... operator precedence...
@@ -42,6 +45,9 @@ unsigned int findNextSmallest(unsigned int n)
     unsigned int pad;
     unsigned int output;
     
+    if (n == 0)
+        return 0;
+    
     for (int i = 0; i < 32; i++) {
         cout << "i: " << i << endl;
         if ((n & 1<<i) == 0) { // watch out! without (), you will never get here passed... operator precedence...
@@ -68,7 +74,8 @@ unsigned int findNextSmallest(unsigned int n)
 
 int main()
 {
-    unsigned int n = 0b00111111;
+    //unsigned int n = 0b00111111;
+    unsigned int n = 0;
     unsigned int nSmall = findNextSmallest(n);
     unsigned int nBig = findNextBiggest(n);
     cout << "n: " << bitset<32>(n) << " nSmall: " << bitset<32>(nSmall) << " nBig: " << bitset<32>(nBig) << endl; 
