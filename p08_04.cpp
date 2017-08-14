@@ -3,6 +3,8 @@
 
 using namespace std;
 
+//NOTE: this version doesn't include the empty set {}.... 
+
 void printMyVec(vector<int> &rmyVec)
 {
     cout << "{";
