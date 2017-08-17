@@ -2,6 +2,8 @@
 #include <string>
 #include <unordered_map>
 
+/* First time using unordered_map in 2017/08. Also, using namespace std globally is a bad practice! */
+
 int main()
 {
     using namespace std;
