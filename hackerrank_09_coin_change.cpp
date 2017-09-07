@@ -23,7 +23,7 @@
 
 using namespace std;
 using largeint = long long;
-long long make_change(const vector<int> &coins, int offset, int money, largeint **ppArr) {
+long long make_change(const vector<int> &coins, int offset, int money, unordered_map<string, largeint> &mymap) {
     
     if (money < 0) // shouldn't happen though. 
         return 0;
@@ -32,20 +32,22 @@ long long make_change(const vector<int> &coins, int offset, int money, largeint 
     
     int target_coin = coins[offset];
     
-    if (offset == coins.size()-1) { // the last coin type.
+    if (offset == coins.size()-1) { // the last coin type. 
         if (money % target_coin != 0)
             return 0;
         else
             return 1;
     }
+    // or we can just go over one more depth and return 0 when offset = coins.size()
     
     int max = money/target_coin;
     long long cases = 0; // watch out for overflow!
     for (int i = 0; i <= max; i++) {
         
-        if (ppArr[money-target_coin*i][offset+1] == -1) // in other words, no use of this memo for the first level.
-            ppArr[money-target_coin*i][offset+1] = make_change(coins, offset+1, money-target_coin*i, ppArr);
-        cases += ppArr[money-target_coin*i][offset+1];
+        string key = to_string(money-target_coin*i) + "-" + to_string(offset+1);
+        if (mymap.count(key) == 0) // in other words, no use of this memo for the first level.
+            mymap[key] = make_change(coins, offset+1, money-target_coin*i, mymap);
+        cases += mymap[key];
         
         //cases += make_change(coins, offset+1, money-target_coin*i, ppArr);
         //15685693751
@@ -64,21 +66,10 @@ int main(){
     }
     
     // Descending order
-    sort(coins.rbegin(),coins.rend());
+    //sort(coins.rbegin(),coins.rend()); // actually, not necessary.
     
-    largeint **ppArr = new largeint *[n+1];
-    for (int i = 0; i < n+1; i++) {
-        ppArr[i] = new largeint[m];
-        for (int j = 0; j < m; j++)
-            ppArr[i][j] = -1;
-    }
-      
-    cout << make_change(coins, 0, n, ppArr) << endl;
-    
-    for (int i = 0; i < n+1; i++)
-        delete[] ppArr[i];
-    
-    delete[] ppArr;
+    unordered_map<string, largeint> mymap;
+    cout << make_change(coins, 0, n, mymap) << endl;
     
     return 0;
 }
