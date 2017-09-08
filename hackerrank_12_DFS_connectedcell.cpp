@@ -32,9 +32,12 @@ void TagCell(vector< vector<int> > &grid, int r, int c, int ID, regcntmap &mymap
         if (grid[r][c] == 0 || grid[r][c] > 1) // if no fill or being already tagged, nothing to do.
             return;
     
+        // Actually, this newID generation and keeping the count are not necessary for this problem itself.
+        // We could instead simply use the return value of TagCell. 
         int newID;
         if (ID == -1) {
             newID = mymap.size()+5; //an ID value should be larger than 1.
+            cout << "new ID : " << newID << endl;
             grid[r][c] = newID;
             mymap.insert(make_pair(newID, 1));
         } else {
@@ -58,14 +61,26 @@ int get_biggest_region(vector< vector<int> > grid)
     regcntmap mymap;
     
     //Iteratively call for each cell. Do not want to recursively call all the row*col cells.
+    //Could have checked whether the cell is filled or not at this point. 
     for (int i = 0; i < grid.size(); i++)
         for (int j = 0; j < grid[0].size(); j++)
             TagCell(grid, i, j, -1, mymap);
+    
+    cout << "mymap size: " << mymap.size() << endl;
     
     int max = 0;
     for (int i = 0; i < mymap.size(); i++)
         if (mymap[i] > max)
             max = mymap[i];
+    
+    regcntmap::const_iterator it;
+    it = mymap.begin();
+    
+    //Q, why this prints 6 elements, while there are only 2 in the map...?
+    while (it != mymap.end()) {
+        cout << it->first << " count: " << it->second << endl;
+        ++it;
+    }
     
     return max;
 }
