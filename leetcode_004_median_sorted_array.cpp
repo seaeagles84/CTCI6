@@ -29,6 +29,7 @@ public:
             size2 = nums2.size();
         }
         
+        /*
         if (size1 == 0 && size2 == 0)
             return (0.0);
         
@@ -38,6 +39,7 @@ public:
             else
                 return (nums2[size2/2] + nums2[size2/2-1])/2.0;
         }
+        */
         
         cout << "Now general case!" << endl;
         
