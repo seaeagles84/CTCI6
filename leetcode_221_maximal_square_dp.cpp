@@ -41,3 +41,27 @@ public class Solution {
         return maxsqlen * maxsqlen;
     }
 }
+
+// What I repeated solution 1 with C++
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int nrow = matrix.size(); 
+        int ncol = nrow > 0 ? matrix[0].size() : 0;
+        
+        vector<vector<int>> dp(nrow+1,vector<int>(ncol+1,0));
+        
+        int maxLen = 0;
+        for (int r = 1; r <= nrow; r++) {
+            for (int c = 1; c <= ncol; c++) {
+                if (matrix[r-1][c-1] == '1') {
+                    dp[r][c] = min(min(dp[r-1][c], dp[r][c-1]), dp[r-1][c-1]) + 1;
+                    if (dp[r][c] > maxLen)
+                        maxLen = dp[r][c];
+                }
+            }
+        }
+        
+        return maxLen*maxLen;
+    }
+};
