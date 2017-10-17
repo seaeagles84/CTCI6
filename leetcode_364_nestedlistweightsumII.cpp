@@ -68,7 +68,7 @@ public:
 };
 
 // Better solution in the discussion
-// Q. Can this be realized in C++? 
+// Q. Can this be realized in C++?  
 public int depthSumInverse(List<NestedInteger> nestedList) {
     int unweighted = 0, weighted = 0;
     while (!nestedList.isEmpty()) {
@@ -84,3 +84,25 @@ public int depthSumInverse(List<NestedInteger> nestedList) {
     }
     return weighted;
 }
+
+// Here is the C++ version!!!
+// Using vector's 'insert()' function!!! in the end. First time using it in this way.
+class Solution {
+public:
+    int depthSumInverse(vector<NestedInteger>& nestedList) {
+        int unweighted = 0, weighted = 0;
+        while (nestedList.size()) {
+            vector<NestedInteger> nextLevel;
+            for (NestedInteger ni : nestedList) {
+                if (ni.isInteger())
+                    unweighted += ni.getInteger();
+                else
+                    nextLevel.insert(nextLevel.end(), ni.getList().begin(), ni.getList().end());
+            }
+            weighted += unweighted;
+            nestedList = nextLevel;
+        }
+        return weighted;
+
+    }
+};
