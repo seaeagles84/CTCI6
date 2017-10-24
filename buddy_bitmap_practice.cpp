@@ -29,39 +29,41 @@ void set_bit(vector<int> &vec, int pos, int len)
     int start = pos;
     int end = min(min(int(vec.size()) - 1, pos+len-1),2*pos);
     
-    //descendant
+    
     for (int i = start; i <= end; i++) {
         if (vec[i] == 1)
             continue;
-            
+        
+        //itself & descendant    
         set_bit_all(vec, i);
         
         //ancestor
         int j = i;
+        // No need of check whether the ancestor is already 1.
+        // If that happens, that means the tree is already corrupted!
         while (j > 0) {
-            if (vec[j] == 1)
-                break;
-            
             if (j%2 == 1 && j+1 < vec.size() && vec[j+1] == 1)
-                vec[(i-1)/2] = 1;
+                vec[(j-1)/2] = 1;
             else if (j%2 == 0 && vec[j-1] == 1)
                 vec[(j-1)/2] = 1;
+            else
+                break;
             
             j = (j-1)/2;
         }
     }
 }
 
-void clear_bit(vector<int> vec, int pos, int len)
+void clear_bit(vector<int> &vec, int pos, int len)
 {
     int start = pos;
     int end = min(int(vec.size()) - 1, pos+len-1);
     
-    //descendant
     for (int i = start; i <= end; i++) {
         if (vec[i] == 0)
             continue;
-        
+    
+        //descendant, only one side!    
         int j = i;
         while (j < vec.size()) {
             if (vec[j] == 0)
@@ -73,14 +75,43 @@ void clear_bit(vector<int> vec, int pos, int len)
         //ancestor
         j = i;
         while (j > 0) {
-            vec[j] = 0;
+            //Important to do it (j-1)/2 instead of j
+            vec[(j-1)/2] = 0;
             j = (j-1)/2;
         }
     }
 }
 
+void print_bitmap(vector<int> &vec)
+{
+    cout << "Length: " << vec.size() << endl;
+    
+    int next = 2;
+    int count = 0;
+    for (auto element : vec) {
+        cout << element << " ";
+        count++;
+        if (count+1 == next) {
+            cout << endl;
+            next *= 2;
+        }
+    }
+    
+    cout << endl;
+}
+
 int main()
 {
     vector<int> bitmap {0,0,1,1,0,1,1,1,1,1,0,1};
+    print_bitmap(bitmap);
+    
+    set_bit(bitmap, 4, 10);
+    
+    print_bitmap(bitmap);
+    
+    clear_bit(bitmap, 4, 1);
+    
+    print_bitmap(bitmap);
+    
     return 0;
 }
